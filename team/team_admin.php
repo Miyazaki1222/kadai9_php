@@ -1,11 +1,19 @@
 <?php
 require_once('../db_config.php');
 
+// 権限設定のための定義（1:選手, 2:コーチ...）
+$member_type = [
+    1 => '選手',
+    2 => 'コーチ',
+    3 => '監督',
+    4 => '元チームメンバー'
+];
+
 // チーム一覧取得
 $teams_stmt = $pdo->query("SELECT * FROM teams ORDER BY id DESC");
 $teams = $teams_stmt->fetchAll(PDO::FETCH_ASSOC);
 
-// メンバー一覧取得（チーム名も結合）
+// メンバー一覧取得（チーム名も結合して取得）
 $sql = "SELECT m.*, t.team_name FROM members m 
         LEFT JOIN teams t ON m.team_id = t.id 
         ORDER BY t.id DESC, m.back_number ASC";
@@ -45,7 +53,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
 
             <div class="card shadow-sm">
-                <div class="card-header bg-success text-white">選手新規登録</div>
+                <div class="card-header bg-success text-white">メンバー新規登録</div>
                 <form action="../member/insert_member.php" method="POST" class="card-body">
                     <select name="team_id" class="form-select mb-2" required>
                         <option value="">所属チームを選択</option>
@@ -53,10 +61,20 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
                             <option value="<?=$t['id']?>"><?=$t['team_name']?></option>
                         <?php endforeach; ?>
                     </select>
-                    <input type="text" name="player_name" class="form-control mb-2" placeholder="選手名" required>
-                    <input type="number" name="back_number" class="form-control mb-2" placeholder="背番号" required>
+
+                    <select name="member_type" class="form-select mb-2" required>
+                        <option value="">役割を選択</option>
+                        <?php foreach($member_type as $key => $val): ?>
+                            <option value="<?=$key?>"><?=$val?></option>
+                        <?php endforeach; ?>
+                    </select>
+
+                    <input type="text" name="player_name" class="form-control mb-2" placeholder="氏名" required>
                     
-                    <button type="submit" class="btn btn-success btn-sm w-100">選手追加</button>
+                    <input type="number" name="back_number" class="form-control mb-2" 
+                           placeholder="背番号（半角数字）" min="0" step="1" required>
+                    
+                    <button type="submit" class="btn btn-success btn-sm w-100">メンバー追加</button>
                 </form>
             </div>
         </div>
@@ -64,7 +82,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
         <div class="col-md-8">
             <div class="card shadow-sm">
                 <div class="card-header bg-white d-flex justify-content-between align-items-center">
-                    <span>選手名簿一覧</span>
+                    <span>登録名簿一覧</span>
                     <span class="badge bg-secondary"><?=count($members)?> 名登録済み</span>
                 </div>
                 <div class="card-body p-0">
@@ -72,6 +90,7 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
                         <thead class="table-light">
                             <tr>
                                 <th>チーム</th>
+                                <th>役割</th>
                                 <th>背番号</th>
                                 <th>氏名</th>
                                 <th class="text-center">操作</th>
@@ -81,6 +100,9 @@ $members = $members_stmt->fetchAll(PDO::FETCH_ASSOC);
                             <?php foreach($members as $m): ?>
                             <tr>
                                 <td><span class="badge bg-outline-secondary border text-dark"><?=$m['team_name']?></span></td>
+                                <td>
+                                    <?= htmlspecialchars($member_type[$m['member_type']] ?? '不明') ?>
+                                </td>
                                 <td><?=$m['back_number']?></td>
                                 <td><strong><?=$m['player_name']?></strong></td>
                                 <td class="text-center">

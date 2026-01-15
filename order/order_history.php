@@ -1,5 +1,5 @@
 <?php
-require_once('db_config.php');
+require_once('../db_config.php');
 
 // 試合IDごとに最新の保存日時と、登録人数をカウント
 $sql = "SELECT game_id, MAX(created_at) as saved_at, COUNT(*) as p_count 

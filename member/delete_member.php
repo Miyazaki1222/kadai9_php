@@ -1,5 +1,5 @@
 <?php
-require_once('db_config.php');
+require_once('../db_config.php');
 $id = $_GET['id'];
 
 if (!empty($id)) {
@@ -10,7 +10,7 @@ if (!empty($id)) {
     if ($status == false) {
         exit("DeleteError");
     } else {
-        header("Location: team_admin.php");
+        header("Location: ../team/team_admin.php");
         exit;
     }
 }

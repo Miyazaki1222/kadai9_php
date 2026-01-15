@@ -1,5 +1,5 @@
 <?php
-require_once('db_config.php');
+require_once('../db_config.php');
 
 // JSON形式のポストデータを受け取る
 $json = file_get_contents('php://input');

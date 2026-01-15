@@ -1,5 +1,5 @@
 <?php
-require_once('db_config.php');
+require_once('../db_config.php');
 
 $team_name = $_POST['team_name'];
 

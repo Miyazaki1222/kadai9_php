@@ -1,5 +1,5 @@
 <?php
-require_once('db_config.php');
+require_once('../db_config.php');
 
 // 1. 全メンバー取得
 $stmt = $pdo->prepare("SELECT * FROM members");
@@ -34,7 +34,7 @@ $pos_options = ['投', '捕', '一', '二', '三', '遊', '左', '中', '右', '
     <meta charset="UTF-8">
     <title>野球オーダー作成</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="../style.css">
 </head>
 <body class="bg-light">
     <div class="container-fluid py-3">
@@ -123,6 +123,6 @@ $pos_options = ['投', '捕', '一', '二', '三', '遊', '左', '中', '右', '
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.15.0/Sortable.min.js"></script>
-    <script src="script.js"></script>
+    <script src="../script.js"></script>
 </body>
 </html>
